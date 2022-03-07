@@ -2,7 +2,7 @@ let table = document.getElementById("wordletable");
 let currentRow = 0;
 
 let currentWord;
-fetch("js/wordle.json")
+fetch("wordle.json")
   .then(res => res.json())
   .then(data => currentWord = data)
 
