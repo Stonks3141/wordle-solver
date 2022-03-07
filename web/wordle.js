@@ -1,7 +1,10 @@
 let table = document.getElementById("wordletable");
 let currentRow = 0;
-const json = JSON.parse('{"ROATE:{}}');
-let currentWord = json;
+
+let currentWord;
+fetch("https://stonks3141.github.io/wordle-solver/wordle.json")
+  .then(res => res.json())
+  .then(data => currentWord = data)
 
 for (let row = 0; row < 6; row++) {
     
