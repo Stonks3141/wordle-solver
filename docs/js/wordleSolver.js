@@ -1,1 +1,108 @@
-let currentWord,table=document.getElementById("wordletable"),currentRow=0;fetch("wordle.json").then(e=>e.json()).then(e=>currentWord=e);for(let e=0;e<6;e++){table.rows[e].cells[5].onclick=function(){nextRow(this)};for(let t=0;t<5;t++)table.rows[e].cells[t].onclick=function(){cycleColor(this)}}function cycleColor(e){e.parentNode.rowIndex==currentRow&&(e.classList.contains("gray")?e.classList.replace("gray","yellow"):e.classList.contains("yellow")?e.classList.replace("yellow","green"):e.classList.contains("green")&&e.classList.replace("green","gray"))}function nextRow(e){if(0==e.hasAttribute("hidden")){let t=e.parentNode.rowIndex+1,r=getResult(t-1);if("22222"==r)return void e.setAttribute("hidden","");if(!(currentWord=currentWord[Object.keys(currentWord)[0]]).hasOwnProperty(r))return void alert("Invalid input");currentWord=currentWord[r],e.setAttribute("hidden",""),t<5?(table.rows[t].cells[5].removeAttribute("hidden"),currentRow=t):currentRow=6;for(let e=0;e<5;e++)table.rows[t].cells[e].classList.replace("empty","gray");nextWord(t-1,r)}}function writeWord(e,t){for(let r=0;r<5;r++)table.rows[t].cells[r].innerHTML=e[r]}function nextWord(e,t){if("string"==typeof currentWord){writeWord(currentWord,e+1);for(let t=0;t<5;t++)table.rows[e+1].cells[t].classList.replace("gray","green");currentRow=6,table.rows[e+1].cells[5].setAttribute("hidden","")}else writeWord(Object.keys(currentWord)[0],e+1)}function getResult(e){let t="";for(let r=0;r<5;r++){let n=table.rows[e].cells[r].classList;n.contains("gray")?t+="0":n.contains("yellow")?t+="1":n.contains("green")&&(t+="2")}return t}
+let table = document.getElementById("wordletable");
+let currentRow = 0;
+
+let currentWord;
+fetch("https://stonks3141.github.io/wordle-solver/wordle.json")
+  .then(res => res.json())
+  .then(data => currentWord = data)
+
+for (let row = 0; row < 6; row++) {
+    
+    table.rows[row].cells[5].onclick = function() {
+        nextRow(this);
+    };
+    
+    for (let cell = 0; cell < 5; cell++) {
+        table.rows[row].cells[cell].onclick = function() {
+            cycleColor(this);
+        };
+        
+    }
+}
+
+function cycleColor(cell) {
+    if (cell.parentNode.rowIndex == currentRow) {
+        if (cell.classList.contains("gray")) {
+            cell.classList.replace("gray", "yellow");
+        } else if (cell.classList.contains("yellow")) {
+            cell.classList.replace("yellow", "green");
+        } else if (cell.classList.contains("green")) {
+            cell.classList.replace("green", "gray");
+        }
+    }
+}
+
+function nextRow(cell) {
+    if (cell.hasAttribute("hidden") == false) {
+        let row = cell.parentNode.rowIndex + 1;
+        let res = getResult(row - 1);
+        
+        if(res == "22222") {
+            cell.setAttribute("hidden", "");
+            return;
+        }
+        
+        currentWord = currentWord[Object.keys(currentWord)[0]];
+        
+        if (!currentWord.hasOwnProperty(res)) {
+            alert("Invalid input");
+            return;
+        }
+        currentWord = currentWord[res];
+        
+        cell.setAttribute("hidden", "");
+        
+        if (row < 5) {
+            table.rows[row].cells[5].removeAttribute("hidden");
+            currentRow = row;
+        } else {
+            currentRow = 6;
+        }
+        
+        for (let i = 0; i < 5; i++) {
+            table.rows[row].cells[i].classList.replace("empty", "gray");
+        }
+        
+        nextWord(row - 1, res);
+    }
+}
+
+function writeWord(word, row) {
+    for (let i = 0; i < 5; i++) {
+        table.rows[row].cells[i].innerHTML = word[i];
+    }
+}
+
+function nextWord(row, res) {
+    if (typeof(currentWord) == "string") {
+        writeWord(currentWord, row + 1);
+        
+        for (let i = 0; i < 5; i++) {
+            table.rows[row + 1].cells[i].classList.replace("gray", "green");
+        }
+        
+        currentRow = 6;
+        
+        table.rows[row + 1].cells[5].setAttribute("hidden", "");
+    } else {
+        writeWord(Object.keys(currentWord)[0], row + 1);
+    }
+}
+
+function getResult(row) {
+    let res = "";
+    
+    for (let i = 0; i < 5; i++) {
+        let classes = table.rows[row].cells[i].classList;
+        
+        if (classes.contains("gray")) {
+            res += "0";
+        } else if (classes.contains("yellow")) {
+            res += "1";
+        } else if (classes.contains("green")) {
+            res += "2";
+        }
+    }
+    
+    return res;
+}
