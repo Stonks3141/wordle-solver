@@ -46,7 +46,6 @@ std::string find_best_word(std::vector<std::string> &guesses, std::vector<std::s
 
     for(auto& guess : guesses)
     {
-        //std::cerr << "guessing:" << guess << " ";
         auto elim_ctr = 0.0;
 
         auto colors = std::map<std::string, int>();
@@ -81,44 +80,37 @@ std::string find_best_word(std::vector<std::string> &guesses, std::vector<std::s
     return best_guess;
 }
 
-std::vector<std::string> thing(std::vector<std::string> &guesses, std::vector<std::string> &answers, std::string answer, std::string guess)
+void thing(std::vector<std::string> &guesses, std::vector<std::string> &answers)
 {
-    auto new_answers = answers;
-
-    auto color = find_color(guess, answer);
-
-    new_answers.erase(std::remove_if(new_answers.begin(), new_answers.end(),
-                                     [color, guess](std::string answer2){
-        if(find_color(guess, answer2) != color)
-            return true;
-        else
-            return false;
-    }), new_answers.end());
-
-    //std::cout << "new size: " << new_answers.size() << "\n";
-
-    if(new_answers.size() == 1)
+    if(answers.size() == 1)
     {
-        std::cerr << new_answers[0] << " ";
-        return {new_answers[0]};
+        std::cout << "\"" << answers[0] << "\","; // "THING",
+        return;
     }
-    else
+    auto guess = find_best_word(guesses, answers);
+    std::cout << "{\"" << guess << "\":{"; // {"THING":{
+
+    auto colors = std::vector<std::string>{};
+
+    for(auto& answer : answers)
+        colors.push_back(find_color(guess, answer));
+
+    for(auto& color : colors)
     {
-        auto t = find_best_word(guesses, new_answers);
-        std::cerr << t << " ";
-        if(t == answer)
-            return {t};
+        std::cout << "\"" << color << "\":"; // "01210":
+        auto new_answers = answers;
 
-        auto r = thing(guesses, new_answers, answer, t);
-        r.insert(r.begin(), t);
+        new_answers.erase(std::remove_if(new_answers.begin(), new_answers.end(),
+                                         [color, guess](std::string answer2){
+            if(find_color(guess, answer2) != color)
+                return true;
+            else
+                return false;
+        }), new_answers.end());
 
-        if(r.size() > 100)
-        {
-            std::cout << "uhoh\n";
-            exit(1);
-        }
-        return r;
+        thing(guesses, new_answers);
     }
+    std::cout << "}},"; // }},
 }
 
 int main(int argc, char const *argv[])
@@ -150,18 +142,7 @@ int main(int argc, char const *argv[])
     ansfile.close();
     guessfile.close();
 
-    auto speed = std::map<int, int>();
-
-    for(auto& ans : answers)
-    {
-        std::cerr << "roate ";
-        auto a = thing(guesses, answers, ans, "roate");
-        std::cout << "\n";
-        speed[a.size()]++;
-    }
-
-    for(auto& [num, ct] : speed)
-        std::cout << ct << " Wordles solved in " << num << " tries\n";
+    thing(guesses, answers);
 
     return 0;
 }
