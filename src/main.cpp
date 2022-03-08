@@ -40,6 +40,7 @@ std::string find_best_word(std::vector<std::string> &guesses, std::vector<std::s
 {
     if(answers.size() == 2309)
         return "ROATE";
+
     auto best_guess = std::string();
     auto best_guess_count = 0;
 
@@ -98,7 +99,9 @@ void thing(std::vector<std::string> &guesses, std::vector<std::string> &answers,
     {
         auto c = find_color(guess, answer);
         if(std::find(colors.begin(), colors.end(), c) == colors.end())
+        {
             colors.push_back(c);
+        }
     }
 
     for(auto& color : colors)
@@ -138,12 +141,14 @@ int main(int argc, char const *argv[])
 
     while(std::getline(ansfile, str))
     {
+        std::transform(str.begin(), str.end(), str.begin(), [](auto c){return std::toupper(c);});
         answers.push_back(str);
     }
 
     str.clear();
     while(std::getline(guessfile, str))
     {
+        std::transform(str.begin(), str.end(), str.begin(), [](auto c){return std::toupper(c);});
         guesses.push_back(str);
     }
     ansfile.close();
