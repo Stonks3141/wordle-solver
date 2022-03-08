@@ -38,6 +38,8 @@ std::string find_color(std::string guess, std::string answer)
 
 std::string find_best_word(std::vector<std::string> &guesses, std::vector<std::string> &answers)
 {
+    if(answers.size() == 2309)
+        return "ROATE";
     auto best_guess = std::string();
     auto best_guess_count = 0;
 
@@ -80,24 +82,28 @@ std::string find_best_word(std::vector<std::string> &guesses, std::vector<std::s
     return best_guess;
 }
 
-void thing(std::vector<std::string> &guesses, std::vector<std::string> &answers)
+void thing(std::vector<std::string> &guesses, std::vector<std::string> &answers, std::ofstream &file)
 {
     if(answers.size() == 1)
     {
-        std::cout << "\"" << answers[0] << "\","; // "THING",
+        file << "\"" << answers[0] << "\","; // "THING",
         return;
     }
     auto guess = find_best_word(guesses, answers);
-    std::cout << "{\"" << guess << "\":{"; // {"THING":{
+    file << "{\"" << guess << "\":{"; // {"THING":{
 
     auto colors = std::vector<std::string>{};
 
     for(auto& answer : answers)
-        colors.push_back(find_color(guess, answer));
+    {
+        auto c = find_color(guess, answer);
+        if(std::find(colors.begin(), colors.end(), c) == colors.end())
+            colors.push_back(c);
+    }
 
     for(auto& color : colors)
     {
-        std::cout << "\"" << color << "\":"; // "01210":
+        file << "\"" << color << "\":"; // "01210":
         auto new_answers = answers;
 
         new_answers.erase(std::remove_if(new_answers.begin(), new_answers.end(),
@@ -108,9 +114,10 @@ void thing(std::vector<std::string> &guesses, std::vector<std::string> &answers)
                 return false;
         }), new_answers.end());
 
-        thing(guesses, new_answers);
+        thing(guesses, new_answers, file);
     }
-    std::cout << "}},"; // }},
+    file << "}},"; // }},
+    file.flush();
 }
 
 int main(int argc, char const *argv[])
@@ -142,7 +149,11 @@ int main(int argc, char const *argv[])
     ansfile.close();
     guessfile.close();
 
-    thing(guesses, answers);
+    auto file = std::ofstream("wordle.json");
+
+    thing(guesses, answers, file);
+
+    file.close();
 
     return 0;
 }
