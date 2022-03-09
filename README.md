@@ -9,6 +9,8 @@ This solver uses a decision tree stored as JSON to solve a Wordle. The user tell
 5 | 114\
 6 | 0
 
+![](https://github.com/Stonks3141/wordle-solver/blob/8620a0affbab1c4abc8e4753d3b5c43afb5e8b25/bar-graph.png)
+
 ## Average:
 3.71 guesses
 
