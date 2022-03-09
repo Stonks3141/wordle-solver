@@ -36,17 +36,8 @@ def func1(d, ans):
         return 2
     return func1(d[a][c], ans) + 1
     
-
-speed = {
-    1:0,
-    2:0,
-    3:0,
-    4:0,
-    5:0,
-    6:0
-}
+speed = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0}
 for answer in answers:
     print(answer)
     speed[func1(data, answer)] += 1;
-
 print(speed)
