@@ -119,7 +119,7 @@ void thing(std::vector<std::string> &guesses, std::vector<std::string> &answers,
 
         thing(guesses, new_answers, file);
     }
-    file << "}},"; // }},
+    file << "\b}},"; // remove trailing comma
     file.flush();
 }
 
