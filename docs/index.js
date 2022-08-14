@@ -7,10 +7,10 @@ fetch('https://raw.githubusercontent.com/Stonks3141/wordle-solver/main/wordle.js
   .then(data => currentWord = data);
 
 for (let row = 0; row < 6; row++) {
-  table.rows[row].cells[5].addEventListener('click', (e) => nextRow(e.target));
+  table.rows[row].cells[5].onclick = function() { nextRow(this) };
 
   for (let cell = 0; cell < 5; cell++) {
-    table.rows[row].cells[cell].addEventListener('click', (e) => cycleColor(e.target));
+    table.rows[row].cells[cell].onclick = function() { cycleColor(this) };
   }
 }
 
