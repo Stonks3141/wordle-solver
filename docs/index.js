@@ -1,64 +1,60 @@
-let table = document.getElementById("wordletable");
+let table = document.getElementById('wordletable');
 let currentRow = 0;
 
 let currentWord;
-fetch("https://raw.githubusercontent.com/Stonks3141/wordle-solver/main/wordle.json")
+fetch('https://raw.githubusercontent.com/Stonks3141/wordle-solver/main/wordle.json')
   .then(res => res.json())
-  .then(data => currentWord = data)
+  .then(data => currentWord = data);
 
-for (let row = 0; row <= 5; row++) {
-  table.rows[row].cells[5].onclick = () => {
-    nextRow(this);
-  };
+for (let row = 0; row < 6; row++) {
+  table.rows[row].cells[5].onclick = (e) => nextRow(e.target);
 
   for (let cell = 0; cell < 5; cell++) {
-    table.rows[row].cells[cell].onclick = () => {
-      cycleColor(this);
-    };
+    table.rows[row].cells[cell].onclick = (e) => cycleColor(e.target);
   }
 }
 
 function cycleColor(cell) {
   if (cell.parentNode.rowIndex == currentRow) {
-    if (cell.classList.contains("gray")) {
-      cell.classList.replace("gray", "yellow");
-    } else if (cell.classList.contains("yellow")) {
-      cell.classList.replace("yellow", "green");
-    } else if (cell.classList.contains("green")) {
-      cell.classList.replace("green", "gray");
+    if (cell.classList.contains('gray')) {
+      cell.classList.replace('gray', 'yellow');
+    } else if (cell.classList.contains('yellow')) {
+      cell.classList.replace('yellow', 'green');
+    } else if (cell.classList.contains('green')) {
+      cell.classList.replace('green', 'gray');
     }
   }
 }
 
 function nextRow(cell) {
-  if (cell.hasAttribute("hidden") == false) {
+  if (cell.hasAttribute('hidden') == false) {
     let row = cell.parentNode.rowIndex + 1;
     let res = getResult(row - 1);
 
-    if(res == "22222") {
-      cell.setAttribute("hidden", "");
+    if(res == '22222') {
+      cell.setAttribute('hidden', '');
       return;
     }
 
     currentWord = currentWord[Object.keys(currentWord)[0]];
 
     if (!currentWord.hasOwnProperty(res)) {
-      alert("Invalid input");
+      alert('Invalid input');
       return;
     }
     currentWord = currentWord[res];
 
-    cell.setAttribute("hidden", "");
+    cell.setAttribute('hidden', '');
 
     if (row < 5) {
-      table.rows[row].cells[5].removeAttribute("hidden");
+      table.rows[row].cells[5].removeAttribute('hidden');
       currentRow = row;
     } else {
       currentRow = 6;
     }
 
     for (let i = 0; i < 5; i++) {
-      table.rows[row].cells[i].classList.replace("empty", "gray");
+      table.rows[row].cells[i].classList.replace('empty', 'gray');
     }
 
     nextWord(row - 1, res);
@@ -72,16 +68,16 @@ function writeWord(word, row) {
 }
 
 function nextWord(row, res) {
-  if (typeof(currentWord) == "string") {
+  if (typeof(currentWord) == 'string') {
     writeWord(currentWord, row + 1);
 
     for (let i = 0; i < 5; i++) {
-        table.rows[row + 1].cells[i].classList.replace("gray", "green");
+        table.rows[row + 1].cells[i].classList.replace('gray', 'green');
     }
 
     currentRow = 6;
 
-    table.rows[row + 1].cells[5].setAttribute("hidden", "");
+    table.rows[row + 1].cells[5].setAttribute('hidden', '');
   } else {
     writeWord(Object.keys(currentWord)[0], row + 1);
   }
