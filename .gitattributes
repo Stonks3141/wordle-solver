@@ -1,1 +1,3 @@
 docs/**/* -linguist-documentation
+answers.h linguist-generated
+guesses.h linguist-generated
