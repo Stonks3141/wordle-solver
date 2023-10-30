@@ -8,7 +8,7 @@ The solver is available online at https://stonks3141.github.io/wordle-solver.
 There are 2309 possible wordle solutions.
 
 | Number of guesses | Frequency |
-|-|-|
+|-:|-:|
 |1|0|
 |2|23|
 |3|816|
@@ -19,5 +19,11 @@ There are 2309 possible wordle solutions.
 Average: 3.66 guesses
 
 ## Usage
-
-Compile `main.c` and run `./main | sed 's/,}/}/g;s/,$//' > wordle.json`. The sed command strips trailing commas from the JSON.
+```sh
+# Compile the solver
+make
+# Run the solver and strip trailing commas from the JSON
+./wordle-solver | sed 's/,}/}/g;s/,$//' > wordle.json
+# Print statistics
+python3 guess_dist.py
+```
