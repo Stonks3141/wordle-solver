@@ -1,11 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Wordle Solver</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://unpkg.com/alpinejs@3.11.1/dist/cdn.min.js" integrity="sha384-D0U8hqw9ySktLounY2q1PAWeijVsqewBtT2NhQp2pxSugkKfpRnovV2sSwJC+V5U" crossorigin defer></script>
-    <link rel="stylesheet" href="main.css" />
+    <title>Wordle Solver</title>
+    <style>
+      :root {
+        --base: #181414;
+        --text: #ffffff;
+        --gray: #3a3a3c;
+        --yellow: #b59f3b;
+        --green: #538d4e;
+      }
+      body {
+        font-family: "Helvetica Neue", Helvetica, sans-serif;
+        background-color: var(--base);
+      }
+      main {
+        padding: 30px;
+        margin: auto;
+      }
+      td {
+        font-size: 35px;
+        font-weight: 600;
+        vertical-align: middle;
+        width: 53px;
+        height: 53px;
+        color: var(--text);
+        padding: 0px;
+        text-align: center;
+        user-select: none;
+      }
+      table {
+        border-spacing: 5px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .gray {
+        background-color: var(--gray);
+      }
+      .yellow {
+        background-color: var(--yellow);
+      }
+      .green {
+        background-color: var(--green);
+      }
+      .confirm {
+        font-size: 15px;
+        background-color: var(--gray);
+      }
+      .empty {
+        outline: 2px solid var(--gray);
+        outline-offset: -2px;
+      }
+    </style>
+    <script src="/alpine.min.js" integrity="sha384-D0U8hqw9ySktLounY2q1PAWeijVsqewBtT2NhQp2pxSugkKfpRnovV2sSwJC+V5U" defer></script>
     <script defer>
       const dataUrl = 'https://raw.githubusercontent.com/Stonks3141/wordle-solver/main/wordle.json';      
 
